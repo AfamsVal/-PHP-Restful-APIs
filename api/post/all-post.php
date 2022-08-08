@@ -6,6 +6,19 @@ header('Content-Type: application/json');
 include_once '../../config/Database.php';
 include_once '../../models/Post.php';
 
+
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+    http_response_code(503);
+    //No post
+    echo json_encode(
+        array(
+            'status' => false,
+            'message' => 'Access Denied!'
+        )
+    );
+    exit();
+}
+
 //Instantiate DB $ Connect
 $database = new Database();
 $db = $database->connection();
@@ -33,11 +46,19 @@ if ($result[0] > 0) {
         //Push to data
         array_push($posts_arr['data'], $post_item);
     }
+    http_response_code(200);
     //Turn to JSON and output
-    echo json_encode(($posts_arr));
+    echo json_encode(array(
+        'status' => true,
+        'data' => $posts_arr
+    ));
 } else {
+    http_response_code(404);
     //No post
     echo json_encode(
-        array('message' => 'No post found!')
+        array(
+            'status' => false,
+            'message' => 'No post found!' . $db->error
+        )
     );
 }
