@@ -12,7 +12,6 @@ class Users
 
     private $conn;
     private $users_table;
-    private $projects_table;
 
 
     public function __construct($db)
@@ -34,7 +33,6 @@ class Users
 
         if ($query->num_rows) {
             return 0;
-            exit();
         }
 
         $user_query = 'INSERT INTO ' . $this->users_table . ' SET name=?, email=?, password=?';
@@ -42,9 +40,8 @@ class Users
         $user_obj->bind_param('sss', $this->name, $this->email, $this->password);
         if ($user_obj->execute()) {
             return 1;
-        } else {
-            return 2;
         }
+        return 2;
     }
 
     public function check_is_user_login()

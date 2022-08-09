@@ -70,11 +70,10 @@ if ($result === 1) {
 
 if ($result === 2) {
     http_response_code(503);
-    //No post
     echo json_encode(
         array(
             'status' => false,
-            'message' => 'Post not created!' . $db->error
+            'message' => 'User not created!' . $db->error
         )
     );
 }

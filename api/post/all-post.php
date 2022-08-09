@@ -32,6 +32,7 @@ $result = $post->read();
 //Check if any post
 if ($result[0] > 0) {
     $posts_arr = array();
+    $posts_arr['status'] = true;
     $posts_arr['data'] = array();
     while ($row = mysqli_fetch_assoc($result[1])) {
         extract($row);
@@ -48,10 +49,7 @@ if ($result[0] > 0) {
     }
     http_response_code(200);
     //Turn to JSON and output
-    echo json_encode(array(
-        'status' => true,
-        'data' => $posts_arr
-    ));
+    echo json_encode($posts_arr);
 } else {
     http_response_code(404);
     //No post
