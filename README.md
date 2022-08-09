@@ -1,4 +1,4 @@
-# PHP REST API
+# PHP REST API with JWT AUTH
 
 > This is a simple PHP REST API from scratch with no framework.
 
