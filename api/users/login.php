@@ -1,4 +1,8 @@
 <?php
+require '../../vendor/autoload.php';
+
+use \Firebase\JWT\JWT;
+
 //Header
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
@@ -54,11 +58,29 @@ if (!empty($user_data)) {
     $password = $user_data['password'];
 
     if (password_verify($data->password, $password)) {
+        $iat = time();
+        $secret_key = '12345';
+
+        $payload_info = array(
+            "iss" => 'localhost',
+            "iat" => $iat,
+            "nbf" => $iat + 10, //10 sec
+            "exp" => $iat + 60 * 10, //1min  * 10 = 10mins
+            "aud" => 'myusers',
+            "data" => array(
+                "id" => $user_data['id'],
+                "name" => $user_data['name'],
+                "email" => $user_data['email']
+            )
+        );
+
+        $jwt = JWT::encode($payload_info, $secret_key, 'HS512');
         http_response_code(200);
         //No post
         echo json_encode(
             array(
-                'status' => false,
+                'status' => true,
+                'token' => $jwt,
                 'message' => 'User logged in successfully'
             )
         );
