@@ -1,9 +1,8 @@
 <?php
 
 require '../../vendor/autoload.php';
+require '../../utils/core.php';
 
-use \Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 //Header
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
@@ -38,8 +37,8 @@ $token = isset($all_headers['Authorization']) ? $all_headers['Authorization']  :
 
 if (!empty($token)) {
     try {
-        $secret_key = '12345';
-        $decoded_data = JWT::decode($token, new Key($secret_key, 'HS512'));
+
+        $decoded_data = decodeToken($token);
 
         $user_id = $decoded_data->data->id;
 
@@ -48,7 +47,7 @@ if (!empty($token)) {
         echo json_encode(
             array(
                 'status' => true,
-                'message' => 'Token Found', #
+                'message' => 'Token Found',
                 'data' => $decoded_data,
                 'user_id' => $user_id
             )
